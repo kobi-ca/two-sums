@@ -2,18 +2,24 @@
 #include <iostream>
 #include <map>
 #include <vector>
-
-using namespace std;
+#include <cassert>
 
 class Solution {
 public:
-    static vector<int> twoSum(vector<int> &nums, int target) {
-        // element ,  <diff, element-index>
-        std::multimap<int, std::pair<int, int>> m;
-        auto int_to_map([i = 0, target](const auto item) mutable {
-            auto value = std::make_pair(target - item, i++);
-            return std::make_pair(item, value);
+    static std::vector<int> twoSum(const std::vector<int> &nums, const int target) {
+        // element ,  element-index
+        std::map<int, int> m;
+        auto process_and_lookup([i = 0, target, &m](const auto item) mutable {
+            auto iter = m.find(target - item);
+            m[item] = i++;
+            return iter != cend(m);
         });
+        auto iter = std::find_if(cbegin(nums), cend(nums), process_and_lookup);
+        assert(iter != cend(nums));
+        const auto idx1 = std::distance(cbegin(nums), iter);
+        const auto idx2 = m[target - *iter];
+        return {idx2, static_cast<int>(idx1)};
+        /*
         (void) std::transform(cbegin(nums), cend(nums), std::inserter(m, end(m)), int_to_map);
         for (const auto &[k, v] : m) {
             auto [diff, idx] = v;
@@ -32,6 +38,7 @@ public:
             return std::vector{idx1, idx2};
         }
         return {};
+         */
     }
 };
 
