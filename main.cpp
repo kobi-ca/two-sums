@@ -9,16 +9,20 @@ public:
     static std::vector<int> twoSum(const std::vector<int> &nums, const int target) {
         // element ,  element-index
         std::map<int, int> m;
-        auto process_and_lookup([i = 0, target, &m](const auto item) mutable {
+        int idx1{}, idx2{};
+        auto process_and_lookup([i = 0, target, &m, &idx1, &idx2](const auto item) mutable {
             auto iter = m.find(target - item);
-            m[item] = i++;
-            return iter != cend(m);
+            if(iter == cend(m)) {
+                m[item] = i++;
+                return false;
+            }
+            idx1 = iter->second;
+            idx2 = i;
+            return true;
         });
         auto iter = std::find_if(cbegin(nums), cend(nums), process_and_lookup);
         assert(iter != cend(nums));
-        const auto idx1 = std::distance(cbegin(nums), iter);
-        const auto idx2 = m[target - *iter];
-        return {idx2, static_cast<int>(idx1)};
+        return {idx1, idx2};
         /*
         (void) std::transform(cbegin(nums), cend(nums), std::inserter(m, end(m)), int_to_map);
         for (const auto &[k, v] : m) {
