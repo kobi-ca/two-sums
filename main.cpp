@@ -30,9 +30,6 @@ public:
                 }
                 idx1 = i;
                 idx2 = iter1->second;
-                if (idx1 > idx2) {
-                    std::swap(idx1, idx2);
-                }
                 return true;
             }
             idx1 = iter1->second;
