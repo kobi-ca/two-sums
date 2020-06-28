@@ -9,7 +9,7 @@ public:
     static std::vector<int> twoSum(const std::vector<int> &nums, const int target) {
         // element ,  <diff, element-index>
         std::multimap<int, int> m;
-        auto transform_func([i = 0, target](const auto item) mutable {
+        auto transform_func([i = 0](const auto item) mutable {
             return std::make_pair(item, i++);
         });
 
